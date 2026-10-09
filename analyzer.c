@@ -47,3 +47,17 @@ int count_words(FILE *fp){
     rewind(fp);
     return words;
 }
+
+/* count the number of characters in a file */
+
+int count_characters(FILE *fp) {
+
+    int characters = 0;
+    char ch;
+    while ((ch = fgetc(fp)) != EOF) {
+        characters++;
+    }
+
+    rewind(fp);
+    return characters;
+}

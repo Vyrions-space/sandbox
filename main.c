@@ -51,6 +51,8 @@ int main(int argc, char *argv[]) {
         printf("Lines: %d\n", count_lines(fp));
     } else if(strcmp(argv[2], "-w") == 0){
         printf("Words: %d\n", count_words(fp));
+    } else if (strcmp(argv[2], "-c") == 0){
+        printf("Characters: %d\n", count_characters(fp));
     } else {
         printf("Unknown option: %s\n", argv[2]);
     }
