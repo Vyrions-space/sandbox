@@ -16,6 +16,10 @@
  *
  * **Options:**
  * - `-l` : Count and display the number of lines in the file.
+ * - '-w'
+ * - '-c'
+ * - '-longlen'
+ * - '-long'
  *
  * @param argc Argument count. The program expects at least 3 arguments:
  *             - `argv[0]`: program name
@@ -53,6 +57,10 @@ int main(int argc, char *argv[]) {
         printf("Words: %d\n", count_words(fp));
     } else if (strcmp(argv[2], "-c") == 0){
         printf("Characters: %d\n", count_characters(fp));
+    } else if (strcmp(argv[2], "-longlen") == 0){
+        printf("Longest Word Len: %d\n", longest_word_lenght(fp));
+    } else if (strcmp(argv[2], "-long") == 0){
+        printf("Longest Word: %s\n", longest_word(fp, longest_word_lenght(fp)));
     } else {
         printf("Unknown option: %s\n", argv[2]);
     }

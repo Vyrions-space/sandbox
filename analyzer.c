@@ -1,5 +1,6 @@
 #include "analyzer.h"
 #include <ctype.h>
+#include <stdlib.h>
 
 /**
  * @brief Count the number of lines in a file.
@@ -60,4 +61,66 @@ int count_characters(FILE *fp) {
 
     rewind(fp);
     return characters;
+}
+
+/* returns the lenght of the longest word in the file */
+
+int longest_word_lenght(FILE *fp) {
+
+    int maxLen = 0;
+    int curWordLen = 0;
+    char ch;
+    while ((ch = fgetc(fp)) != EOF) {
+        if (ch == ' ' || ch == '\n' || ch == '\t'){ 
+
+            if (curWordLen > maxLen) maxLen = curWordLen;
+            curWordLen = 0;
+        } else {
+            curWordLen++;
+        }
+    }
+
+    if (curWordLen > maxLen) maxLen = curWordLen; // in case the last word is the longest
+
+    rewind(fp);
+    return maxLen;
+}
+
+/* returns the longes word in the file, if two or more words have the same max lenght,
+it returns the one that appears first in the file */
+
+char *longest_word(FILE *fp, int maxWordLen) { //
+
+    char *longestWord = malloc(maxWordLen +1);
+    int curWordLen = 0;
+    char ch;
+    int found = 0;
+    while (!found && (ch = fgetc(fp)) != EOF) {
+        if (ch == ' ' || ch == '\n' || ch == '\t') {
+
+            if (curWordLen == maxWordLen) {
+                found = 1;
+                longestWord[maxWordLen] = '\0';
+            }
+            curWordLen = 0;
+        } else {
+
+            longestWord[curWordLen] = ch;
+            curWordLen++;
+        }
+    }
+
+    // if longest word is the last one
+    if (curWordLen == maxWordLen) {
+        found = 1;
+        longestWord[maxWordLen] = '\0';
+    }
+
+    if (found) {
+        return longestWord;
+    } else {
+        free(longestWord);
+        return NULL;
+    }
+
 }
