@@ -9,7 +9,8 @@ int count_words(FILE *fp);
 int count_characters(FILE *fp);
 
 int longest_word_lenght(FILE *fp);
-char *longest_word(FILE *fp, int maxWordLen);
+char *find_word_from_len(FILE *fp, int wordLen);
+char *longest_word(FILE *fp);
 
 
 #endif

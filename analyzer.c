@@ -79,48 +79,52 @@ int longest_word_lenght(FILE *fp) {
             curWordLen++;
         }
     }
-
-    if (curWordLen > maxLen) maxLen = curWordLen; // in case the last word is the longest
+    // check for last word
+    if (curWordLen > maxLen) maxLen = curWordLen;
 
     rewind(fp);
     return maxLen;
 }
 
-/* returns the longes word in the file, if two or more words have the same max lenght,
-it returns the one that appears first in the file */
+/* returns the first word of length wordLen that appears in the file */
 
-char *longest_word(FILE *fp, int maxWordLen) { //
+char *find_word_from_len(FILE *fp, int wordLen) { //
 
-    char *longestWord = malloc(maxWordLen +1);
+    char *word = malloc(wordLen +1);
     int curWordLen = 0;
     char ch;
     int found = 0;
     while (!found && (ch = fgetc(fp)) != EOF) {
         if (ch == ' ' || ch == '\n' || ch == '\t') {
 
-            if (curWordLen == maxWordLen) {
+            if (curWordLen == wordLen) {
                 found = 1;
-                longestWord[maxWordLen] = '\0';
+                word[maxWordLen] = '\0';
             }
             curWordLen = 0;
         } else {
 
-            longestWord[curWordLen] = ch;
+            word[curWordLen] = ch;
             curWordLen++;
         }
     }
-
     // if longest word is the last one
-    if (curWordLen == maxWordLen) {
+    if (curWordLen == wordLen) {
         found = 1;
-        longestWord[maxWordLen] = '\0';
+        word[curWordLen] = '\0';
     }
 
-    if (found) {
+    if (found == 1) {
         return longestWord;
     } else {
         free(longestWord);
         return NULL;
     }
 
+}
+
+/* returns the longest word of the file, if two or more words are the longest
+returns the first one that appears in the file */
+char *longest_word(FILE *fp) {
+    return find_word_from_len(fp, longest_word_lenght(fp));
 }

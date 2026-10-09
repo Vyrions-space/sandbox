@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
     } else if (strcmp(argv[2], "-longlen") == 0){
         printf("Longest Word Len: %d\n", longest_word_lenght(fp));
     } else if (strcmp(argv[2], "-long") == 0){
-        printf("Longest Word: %s\n", longest_word(fp, longest_word_lenght(fp)));
+        printf("Longest Word: %s\n", longest_word(fp));
     } else {
         printf("Unknown option: %s\n", argv[2]);
     }
