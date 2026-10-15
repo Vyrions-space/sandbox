@@ -1,6 +1,9 @@
 #include "analyzer.h"
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
+
+#define MAX_WORD 1000
 
 /**
  * @brief Count the number of lines in a file.
@@ -63,68 +66,149 @@ int count_characters(FILE *fp) {
     return characters;
 }
 
-/* returns the lenght of the longest word in the file */
+/* returns the longest word in the file, if more than one word are the longest 
+it returns the one that happears first, if there are no words, returns NULL;
+assumes that the file pointer fp isn't NULL*/
 
-int longest_word_lenght(FILE *fp) {
+char *longest_word(FILE *fp) {
+    int curLen = 0;
+    int longestLen = 0;
 
-    int maxLen = 0;
-    int curWordLen = 0;
+    char* curWord = malloc(1);
+    char* longestWord = malloc(1);
+    int stringCap = 1;
+
     char ch;
     while ((ch = fgetc(fp)) != EOF) {
-        if (ch == ' ' || ch == '\n' || ch == '\t'){ 
 
-            if (curWordLen > maxLen) maxLen = curWordLen;
-            curWordLen = 0;
-        } else {
-            curWordLen++;
-        }
-    }
-    // check for last word
-    if (curWordLen > maxLen) maxLen = curWordLen;
-
-    rewind(fp);
-    return maxLen;
-}
-
-/* returns the first word of length wordLen that appears in the file */
-
-char *find_word_from_len(FILE *fp, int wordLen) { //
-
-    char *word = malloc(wordLen +1);
-    int curWordLen = 0;
-    char ch;
-    int found = 0;
-    while (!found && (ch = fgetc(fp)) != EOF) {
         if (ch == ' ' || ch == '\n' || ch == '\t') {
 
-            if (curWordLen == wordLen) {
-                found = 1;
-                word[maxWordLen] = '\0';
+            if (curLen > longestLen) {
+
+                char* temp = realloc(longestWord, curLen +1);
+                if (!temp) {
+                    free(curWord);
+                    free(longestWord);
+                    return NULL;
+                }
+
+                longestLen = curLen;
+                longestWord = temp;
+                memcpy(longestWord, curWord, curLen);
+                longestWord[curLen] = '\0';
             }
-            curWordLen = 0;
+            
+            curLen = 0;
         } else {
 
-            word[curWordLen] = ch;
-            curWordLen++;
+            if (curLen +1 > stringCap) {
+
+                stringCap++;
+                char *temp = realloc(curWord, stringCap);
+                if (!temp) {
+                    free(curWord);
+                    free(longestWord);
+                    return NULL;
+                }
+            }
+
+            curWord[curLen] = ch;
+            curLen++;
         }
     }
-    // if longest word is the last one
-    if (curWordLen == wordLen) {
-        found = 1;
-        word[curWordLen] = '\0';
+
+    if (curLen > longestLen) {
+        char* temp = realloc(longestWord, curLen +1);
+        if (!temp) {
+            free(curWord);
+            free(longestWord);
+            return NULL;
+        }
+
+        longestWord = temp;
+        memcpy(longestWord, curWord, curLen);
+        longestWord[curLen] = '\0';
     }
 
-    if (found == 1) {
-        return longestWord;
-    } else {
+    if (strlen(curWord) == 0) {
         free(longestWord);
-        return NULL;
+        longestWord = NULL;
     }
 
+    free(curWord);
+    return longestWord;
 }
 
-/* returns the longest word of the file, if two or more words are the longest
-returns the first one that appears in the file */
-char *longest_word(FILE *fp) {
-    return find_word_from_len(fp, longest_word_lenght(fp));
+/* returns the shortest word in the file, if more than one word are the shortest 
+it returns the one that happears first, if there are no words, returns NULL;
+assumes that the file pointer fp isn't NULL, also assumes that first word has less
+than 1000 characters*/
+
+char *shortest_word(FILE *fp) {
+    int curLen = 0;
+    int shortestLen = MAX_WORD;
+
+    char* curWord = malloc(1);
+    char* shortestWord = malloc(1);
+    int stringCap = 1;
+
+    char ch;
+    while ((ch = fgetc(fp)) != EOF) {
+
+        if (ch == ' ' || ch == '\n' || ch == '\t') {
+
+            if (curLen < shortestLen) {
+
+                char* temp = realloc(shortestWord, curLen +1);
+                if (!temp) {
+                    free(curWord);
+                    free(shortestWord);
+                    return NULL;
+                }
+
+                shortestLen = curLen;
+                shortestWord = temp;
+                memcpy(shortestWord, curWord, curLen);
+                shortestWord[curLen] = '\0';
+            }
+            
+            curLen = 0;
+        } else {
+
+            if (curLen +1 > stringCap) {
+
+                stringCap++;
+                char *temp = realloc(curWord, stringCap);
+                if (!temp) {
+                    free(curWord);
+                    free(shortestWord);
+                    return NULL;
+                }
+            }
+
+            curWord[curLen] = ch;
+            curLen++;
+        }
+    }
+
+    if (curLen < shortestLen) {
+        char* temp = realloc(shortestWord, curLen +1);
+        if (!temp) {
+            free(curWord);
+            free(shortestWord);
+            return NULL;
+        }
+
+        shortestWord = temp;
+        memcpy(shortestWord, curWord, curLen);
+        shortestWord[curLen] = '\0';
+    }
+
+    if (strlen(curWord) == 0) {
+        free(shortestWord);
+        shortestWord = NULL;
+    } 
+
+    free(curWord);
+    return shortestWord;
 }
