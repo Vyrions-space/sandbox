@@ -16,10 +16,12 @@
  *
  * **Options:**
  * - `-l` : Count and display the number of lines in the file.
- * - '-w'
- * - '-c'
- * - '-longlen'
- * - '-long'
+ * - '-w' : Count and display the number of words in the file
+ * - '-c' : Count an display the number of characters in the file
+ * - '-L' : Display the longest word in the file
+ * - '-s' : Display the shortest word in the file
+ * - '-mf': Display the most frequent word in the file
+ * - '-lf': Display the least frequent word in the file
  *
  * @param argc Argument count. The program expects at least 3 arguments:
  *             - `argv[0]`: program name
@@ -42,6 +44,11 @@ int main(int argc, char *argv[]) {
         printf("Options:\n");
         printf("  -l    Count lines\n");
         printf("  -w    Count words\n");
+        printf("  -c    Count characters\n");
+        printf("  -L    Longest word\n");
+        printf("  -s    Shortest word\n");
+        printf("  -mf   Most Frequent word\n");
+        printf("  -lf   Least Frequent word\n");
         return 1;
     }
 
@@ -61,6 +68,10 @@ int main(int argc, char *argv[]) {
         printf("Longest Word: %s\n", longest_word(fp));
     } else if (strcmp(argv[2], "-s") == 0){
         printf("Shortest Word: %s\n", shortest_word(fp));
+    } else if (strcmp(argv[2], "-mf") == 0){
+        printf("Most Frequent Word: %s\n", most_frequent_word(fp));
+    } else if (strcmp(argv[2], "-lf") == 0){
+        printf("Least Frequent Word: %s\n", least_frequent_word(fp));
     } else {
         printf("Unknown option: %s\n", argv[2]);
     }
